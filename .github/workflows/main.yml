@@ -1,4 +1,4 @@
-name: BOTRDP
+name: RDP
 on:
   workflow_dispatch:
     inputs:
