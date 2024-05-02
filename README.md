@@ -18,7 +18,7 @@ Windows 10 Server 2022 RDP - 7GB RAM & 2 CPU Core (6 Hours)
 
 - Go to Action `Click Select workflow` > `Select workflow` > `Press Run workflow`
 
-- Refresh the Web/page and go to Har Pito > click build
+- Refresh the Web/page and go to `actions/workflow` > click build
 
 - Wait 1-5 minutes
 
