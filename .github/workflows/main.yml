@@ -7,10 +7,10 @@ jobs:
     steps:
     - name: Download
       run: |
-        Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip -OutFile ngrok.zip
-        Invoke-WebRequest https://raw.githubusercontent.com/VinnDev/rdp/main/start.bat -OutFile start.bat
-        Invoke-WebRequest https://raw.githubusercontent.com/VinnDev/rdp/main/download1.jpeg -OutFile wallpaper.bat
-        Invoke-WebRequest https://raw.githubusercontent.com/VinnDev/rdp/main/loop.bat -OutFile loop.bat
+        Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+        Invoke-WebRequest https://raw.githubusercontent.com/MochiDDEV/win-rdp/main/start.bat -OutFile start.bat
+        Invoke-WebRequest https://raw.githubusercontent.com/MochiDDEV/win-rdp/main/download1.jpeg -OutFile wallpaper.bat
+        Invoke-WebRequest https://raw.githubusercontent.com/MochiDDEV/win-rdp/main/loop.bat -OutFile loop.bat
     - name: Extract ngrok.zip
       run: Expand-Archive ngrok.zip
     - name: Connect
