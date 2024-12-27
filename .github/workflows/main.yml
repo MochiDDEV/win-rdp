@@ -1,31 +1,25 @@
-name: RDP
+name: CI
+
 on: [push, workflow_dispatch]
+
 jobs:
   build:
+
     runs-on: windows-latest
-    timeout-minutes: 9999
+
     steps:
     - name: Download
-      run: |
-        Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
-        Invoke-WebRequest https://raw.githubusercontent.com/MochiDDEV/win-rdp/main/start.bat -OutFile start.bat
-        Invoke-WebRequest https://raw.githubusercontent.com/MochiDDEV/win-rdp/main/download1.jpeg -OutFile wallpaper.bat
-        Invoke-WebRequest https://raw.githubusercontent.com/MochiDDEV/win-rdp/main/loop.bat -OutFile loop.bat
-    - name: Extract ngrok.zip
+      run: Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip -OutFile ngrok.zip
+    - name: Extract
       run: Expand-Archive ngrok.zip
-    - name: Connect
-      run: .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH
+    - name: Auth
+      run: .\ngrok\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
       env:
-        NGROK_AUTH: ${{ secrets.NGROK_AUTH_TOKEN }}
-    - name: Setup
-      run: |
-        Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
-        Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
-        Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
-        copy wallpaper.bat D:\a\wallpaper.bat
+        NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
+    - name: Enable TS
+      run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
+    - run: Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
+    - run: Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
+    - run: Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
     - name: Create Tunnel
-      run: Start-Process Powershell -ArgumentList '-Noexit -Command ".\ngrok\ngrok.exe tcp --region ap 3389"'
-    - name: Connect RDP
-      run: cmd /c start.bat
-    - name: Windows 10 Server 2022 RDP
-      run: cmd /c loop.bat
+      run: .\ngrok\ngrok.exe tcp 3389
